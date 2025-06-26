@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export function getImagesByQuery(query, page) {
+export async function getImagesByQuery(query, page) {
 
     const API_KEY = "50815044-d1b29e7254804b3149c32accf";
     const BASE_URL = "https://pixabay.com/api/";
@@ -14,7 +14,7 @@ export function getImagesByQuery(query, page) {
         page,
         per_page:PER_PAGE,
     });
-    return axios(`${BASE_URL}?${params}`)
+    return await axios(`${BASE_URL}?${params}`)
         .then(res => 
             res.data)
         .catch(error => {
