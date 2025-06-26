@@ -29,12 +29,12 @@ export function createGallery(images) {
 `).join('');
 };
 
-export function showLoadMore() {
+export function showLoadMoreButton() {
     loadMore.classList.remove("hidden");
     loadMore.disabled = false;
     loadMore.textContent = "Load more";
 }
-export function hideLoadMore() {
+export function hideLoadMoreButton() {
  loadMore.classList.add("hidden")   
 }
 

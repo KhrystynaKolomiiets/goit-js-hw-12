@@ -9,8 +9,8 @@ import {
     clearGallery,
     hideLoader,
     showLoader,
-    showLoadMore,
-    hideLoadMore
+    showLoadMoreButton,
+    hideLoadMoreButton
 } from './js/render-functions';
 
 
@@ -38,6 +38,7 @@ loadMore.addEventListener("click", handleClick)
 async function handleSubmit(event) {
     event.preventDefault();
     clearGallery();
+    hideLoadMoreButton();
     showLoader();
     myPicture = inputField.value.trim();
     currentPage = 1;
@@ -50,7 +51,7 @@ async function handleSubmit(event) {
         hideLoader();
     return;
     }
-    hideLoadMore();
+    hideLoadMoreButton();
     try {
         const response = await getImagesByQuery(myPicture, currentPage);
         totalHits = response.totalHits;
@@ -69,9 +70,9 @@ async function handleSubmit(event) {
         lightBox.refresh();
         loadedHits += response.hits.length;
         if (loadedHits < totalHits) {
-            showLoadMore();
+            showLoadMoreButton();
         } else {
-            hideLoadMore();
+            hideLoadMoreButton();
             iziToast.info({
                 message: "We're sorry, but you've reached the end of search results.",
                 position: 'topRight',
@@ -92,7 +93,7 @@ async function handleSubmit(event) {
 
 
 async function handleClick(event) {
-    hideLoadMore();
+    hideLoadMoreButton();
     showLoader();
     await new Promise(resolve => setTimeout(resolve, 1000));
     try {
@@ -103,13 +104,13 @@ async function handleClick(event) {
         lightBox.refresh();
         loadedHits += response.hits.length;
         if (loadedHits >= totalHits) {
-            hideLoadMore();
+            hideLoadMoreButton();
             iziToast.info({
                 message: "We're sorry, but you've reached the end of search results.",
                 position: 'topRight',
             });
         } else {
-            showLoadMore();
+            showLoadMoreButton();
         }
         const { height: cardHeight } = document.querySelector(".gallery").firstElementChild.getBoundingClientRect();
 
@@ -125,5 +126,6 @@ async function handleClick(event) {
         console.log(error);
     } finally {
         hideLoader();
+        hideLoadMoreButton();
         }
 };
