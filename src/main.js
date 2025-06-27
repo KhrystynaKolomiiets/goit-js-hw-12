@@ -14,10 +14,7 @@ import {
 } from './js/render-functions';
 
 
-const lightBox = new SimpleLightbox(".image-item", {
-    captionsData: 'alt',
-    captionDelay: 250,
-});
+
 const form = document.querySelector(".form");
 const inputField = document.querySelector(".input-field");
 const loader = document.querySelector(".loader");
@@ -39,7 +36,7 @@ async function handleSubmit(event) {
     event.preventDefault();
     clearGallery();
     hideLoadMoreButton();
-    showLoader();
+   
     myPicture = inputField.value.trim();
     currentPage = 1;
     loadedHits = 0;
@@ -48,14 +45,16 @@ async function handleSubmit(event) {
       message: 'Please enter a search query.',
       position: 'topRight',
         });
-        hideLoader();
+       
     return;
     }
+    clearGallery();
     hideLoadMoreButton();
+    showLoader();
     try {
         const response = await getImagesByQuery(myPicture, currentPage);
         totalHits = response.totalHits;
-        hideLoader();
+        
         if (response.hits.length === 0) {
             return iziToast.info({
                 title: 'Error',
@@ -64,11 +63,9 @@ async function handleSubmit(event) {
                 position: 'topRight',
             });
         }
-        const markup = createGallery(response.hits);
-        
-        gallery.insertAdjacentHTML('beforeend', markup);
-        lightBox.refresh();
+        createGallery(response.hits);  
         loadedHits += response.hits.length;
+
         if (loadedHits < totalHits) {
             showLoadMoreButton();
         } else {
@@ -95,13 +92,11 @@ async function handleSubmit(event) {
 async function handleClick(event) {
     hideLoadMoreButton();
     showLoader();
-    await new Promise(resolve => setTimeout(resolve, 1000));
     try {
         currentPage += 1;
         const response = await getImagesByQuery(myPicture, currentPage);
-        const markup = createGallery(response.hits);
-        gallery.insertAdjacentHTML('beforeend', markup);
-        lightBox.refresh();
+        createGallery(response.hits);
+       
         loadedHits += response.hits.length;
         if (loadedHits >= totalHits) {
             hideLoadMoreButton();
@@ -126,6 +121,6 @@ async function handleClick(event) {
         console.log(error);
     } finally {
         hideLoader();
-        hideLoadMoreButton();
+        
         }
 };

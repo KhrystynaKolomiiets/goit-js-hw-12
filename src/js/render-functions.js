@@ -5,8 +5,13 @@ const loader = document.querySelector(".loader");
 const gallery = document.querySelector(".gallery");
 const loadMore = document.querySelector(".load-more");
 
+const lightBox = new SimpleLightbox(".image-item", {
+    captionsData: 'alt',
+    captionDelay: 250,
+});
+
 export function createGallery(images) {
-    return images.map(image =>
+    const markup = images.map(image =>
         ` <li class="gallery-item">
         <a class="image-item" href = "${image.largeImageURL}">
         <img src = "${image.webformatURL}" alt = "${image.tags}" />
@@ -27,6 +32,9 @@ export function createGallery(images) {
         </a>
     </li>
 `).join('');
+ 
+    gallery.insertAdjacentHTML('beforeend', markup);
+    lightBox.refresh();
 };
 
 export function showLoadMoreButton() {
